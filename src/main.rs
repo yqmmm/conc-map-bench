@@ -1,9 +1,6 @@
 mod adapters;
 
-use adapters::{
-    CHashMapTable, ContrieTable, DashMapTable, FlurryTable,
-    MutexStdTable,
-};
+use adapters::{CHashMapTable, ContrieTable, DashMapTable, FlurryTable, MutexStdTable};
 use bustle::*;
 use std::thread::sleep;
 use std::time::Duration;
@@ -67,34 +64,36 @@ fn exchange(n: usize) -> Workload {
         .operations(1.5)
 }
 
+static CPUS: &[usize] = &[1, 4, 8, 16, 32];
+
 fn exchange_task() {
     println!("== exchange");
     println!("-- MutexStd");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         exchange(n).run::<MutexStdTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- CHashMap");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         exchange(n).run::<CHashMapTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- Flurry");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         exchange(n).run::<FlurryTable>();
         gc_cycle();
     }
     println!("");
     println!("-- Contrie");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         exchange(n).run::<ContrieTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- DashMap");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         exchange(n).run::<DashMapTable<u64>>();
         gc_cycle();
     }
@@ -104,31 +103,31 @@ fn exchange_task() {
 fn cache_task() {
     println!("== cache");
     println!("-- MutexStd");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         read_heavy(n).run::<MutexStdTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- CHashMap");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         read_heavy(n).run::<CHashMapTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- Flurry");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         read_heavy(n).run::<FlurryTable>();
         gc_cycle();
     }
     println!("");
     println!("-- Contrie");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         read_heavy(n).run::<ContrieTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- DashMap");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         read_heavy(n).run::<DashMapTable<u64>>();
         gc_cycle();
     }
@@ -138,31 +137,31 @@ fn cache_task() {
 fn rapid_grow_task() {
     println!("== rapid grow");
     println!("-- MutexStd");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         rapid_grow(n).run::<MutexStdTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- CHashMap");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         rapid_grow(n).run::<CHashMapTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- Flurry");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         rapid_grow(n).run::<FlurryTable>();
         gc_cycle();
     }
     println!("");
     println!("-- Contrie");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         rapid_grow(n).run::<ContrieTable<u64>>();
         gc_cycle();
     }
     println!("");
     println!("-- DashMap");
-    for n in 1..=num_cpus::get() {
+    for n in CPUS.iter().cloned() {
         rapid_grow(n).run::<DashMapTable<u64>>();
         gc_cycle();
     }
